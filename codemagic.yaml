@@ -20,8 +20,7 @@ workflows:
         script: flutter pub get
 
       - name: Analyze Flutter project
-        script: flutter analyze
-      --no-fatal-infos --no-fatal-warnings
+        script: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Build Android APK
         script: flutter build apk --release
