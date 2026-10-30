@@ -1,0 +1,16 @@
+
+# Secrets and signing material
+*.jks
+*.keystore
+key.properties
+.env
+.env.*
+
+# Flutter/Android generated files
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+android/local.properties
+android/.gradle/
