@@ -24,6 +24,16 @@ workflows:
 
       - name: Build Android APK
         script: flutter build apk --release --target-platform android-arm64,android-arm,android-x64
+      
+      - name: Verify APK
+        script: |
+          APK="build/app/outputs/flutter-apk/app-release.apk"
+          echo "Checking APK..."
+          ls -lh "$APK"
+          unzip -t "$APK"
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+
 
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
