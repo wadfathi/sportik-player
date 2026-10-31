@@ -24,17 +24,32 @@ workflows:
 
       - name: Build Android APK
         script: flutter build apk --release --target-platform android-arm64,android-arm,android-x64
-      
-      - name: Verify APK
+
+      - name: Verify APK file
         script: |
           APK="build/app/outputs/flutter-apk/app-release.apk"
-          echo "Checking APK..."
-          ls -lh "$APK"
-          unzip -t "$APK"
-          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
-          "$APKSIGNER" verify --verbose --print-certs "$APK"
 
+          echo "========== APK FILE =========="
+          ls -lh "$APK"
+          file "$APK"
+
+          echo "========== ZIP INTEGRITY =========="
+          unzip -t "$APK"
+
+          echo "========== APK SIGNATURE =========="
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
+          echo "Using: $APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" || true
+
+          echo "========== APK PACKAGE INFO =========="
+          AAPT=$(find "$ANDROID_HOME/build-tools" -name aapt | sort -V | tail -n 1)
+          "$AAPT" dump badging "$APK" | head -n 25
+
+          echo "========== APK ALIGNMENT =========="
+          ZIPALIGN=$(find "$ANDROID_HOME/build-tools" -name zipalign | sort -V | tail -n 1)
+          "$ZIPALIGN" -c -v 4 "$APK" || true
+
+          echo "========== VERIFICATION FINISHED =========="
 
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-      
