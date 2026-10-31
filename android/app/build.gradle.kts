@@ -11,6 +11,11 @@ android {
     compileOptions { sourceCompatibility = JavaVersion.VERSION_11; targetCompatibility = JavaVersion.VERSION_11 }
     kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
     defaultConfig { applicationId = "com.sportik.player"; minSdk = 24; targetSdk = flutter.targetSdkVersion; versionCode = flutter.versionCode; versionName = flutter.versionName }
-    buildTypes { release { isMinifyEnabled = false; isShrinkResources = false } }
+    buildTypes {
+    release {
+        signingConfig = signingConfigs.getByName("debug")
+        isMinifyEnabled = false
+        isShrinkResources = false
+    }
 }
 flutter { source = "../.." }
